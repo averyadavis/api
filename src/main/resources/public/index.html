@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+    <head>
+	    <meta charset="utf-8" />
+        <title>Hello SSE</title>
+        <!-- Polyfill for older browsers without native support for the HTML5 EventSource API. -->
+        <script src="https://cdn.polyfill.io/v2/polyfill.min.js?features=EventSource"></script>
+
+        <script>
+            window.onload = function() {
+                const source = new EventSource('/api/');
+
+                source.addEventListener('status',(e) => {
+                    document.body.innerHTML = '<p>' + 'Status: ' + e.data + '</p>';
+                    if(e.lastEventId == '5') source.close();
+                });
+
+                source.addEventListener('complete',(e) => {
+                    document.body.innerHTML = '<p>' + 'Complete: ' + e.data + '</p>';
+                    source.close();
+                });
+
+                source.addEventListener('failure',(e) => {
+                    document.body.innerHTML = '<p>' + 'Failure: ' + e.data + '</p>';
+                    source.close();
+                });
+
+            }
+        </script>
+
+    </head>
+    <body>
+
+    </body>
+</html>
